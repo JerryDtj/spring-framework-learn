@@ -16,24 +16,23 @@
 
 package org.springframework.context.annotation6;
 
-import org.springframework.beans.testfixture.beans.TestBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.testfixture.stereotype.Component;
 
-@Configuration
-public class ConfigForScanning {
-	@Bean
-	public TestBean testBean() {
-		return new TestBean();
+/**
+ * @author Jerry
+ * @Date  2023-9-5
+ */
+@Component
+public class A {
+	@Autowired
+	private B b;
+
+	public B getB() {
+		return b;
 	}
 
-	@Bean
-	public B testA(){
-		return new B();
-	}
-
-	@Bean
-	public A testB(){
-		return new A();
+	public void setB(B b) {
+		this.b = b;
 	}
 }
