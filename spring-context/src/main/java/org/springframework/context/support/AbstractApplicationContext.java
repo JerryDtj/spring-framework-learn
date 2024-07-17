@@ -622,6 +622,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				//ConfigurationClassPostProcessor – 解析 @Configuration、@Bean、@Import、@PropertySource 等
 				//PropertySourcesPlaceHolderConfigurer – 替换 BeanDefinition 中的 ${ }
 				//MapperScannerConfigurer – 补充 Mapper 接口对应的 BeanDefinition
+				// 自动注入，生成一级缓存，并调用PostProcessBeanFactory增强修改bean定义中的值
 				invokeBeanFactoryPostProcessors(beanFactory);
 				// Register bean processors that intercept bean creation.
 				//注册BeanPostProcessors
@@ -637,7 +638,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				initApplicationEventMulticaster();
 
 				// Initialize other special beans in specific context subclasses.
-				//留给之类来初始化其他的bean
+				//留给子类来初始化其他的bean
 				onRefresh();
 
 				// Check for listener beans and register them.

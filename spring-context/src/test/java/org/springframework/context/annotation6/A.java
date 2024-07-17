@@ -16,7 +16,9 @@
 
 package org.springframework.context.annotation6;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.testfixture.stereotype.Component;
 
 /**
@@ -24,7 +26,20 @@ import org.springframework.core.testfixture.stereotype.Component;
  * @Date  2023-9-5
  */
 @Component
-public class A {
+public class A implements BeanPostProcessor {
+
+	@Override
+	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+		System.out.println("进入到before");
+		System.out.println("***beanName: " + beanName+"---"+bean.getClass().getName());
+		return BeanPostProcessor.super.postProcessBeforeInitialization(bean, beanName);
+	}
+
+	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+		System.out.println("进入到after");
+		return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
+	}
+
 	@Autowired
 	private B b;
 

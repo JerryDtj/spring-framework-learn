@@ -484,16 +484,19 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		while (!candidates.isEmpty());
 
 		// Register the ImportRegistry as a bean in order to support ImportAware @Configuration classes
+		//将 ImportRegistry 注册为 bean，以便支持 ImportAware @Configuration类
 		if (sbr != null && !sbr.containsSingleton(IMPORT_REGISTRY_BEAN_NAME)) {
 			sbr.registerSingleton(IMPORT_REGISTRY_BEAN_NAME, parser.getImportRegistry());
 		}
 
 		// Store the PropertySourceDescriptors to contribute them Ahead-of-time if necessary
+		//存储 PropertySourceDescriptors 以在必要时提前提供它们
 		this.propertySourceDescriptors = parser.getPropertySourceDescriptors();
 
 		if (this.metadataReaderFactory instanceof CachingMetadataReaderFactory cachingMetadataReaderFactory) {
 			// Clear cache in externally provided MetadataReaderFactory; this is a no-op
 			// for a shared cache since it'll be cleared by the ApplicationContext.
+			//清除外部提供的 MetadataReaderFactory 中的缓存;这是共享缓存的空操作，因为它将由 ApplicationContext 清除。
 			cachingMetadataReaderFactory.clearCache();
 		}
 	}
