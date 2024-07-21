@@ -611,7 +611,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				logger.trace("Eagerly caching bean '" + beanName +
 						"' to allow for resolving potential circular references");
 			}
-			//1.添加三级缓存
+			//1.添加三级缓存(addSingletonFactory)
 			//依次把testA,TestB加入到三级缓存中,此时一二级缓存无值
 			//为避免后期循环依赖,可以在bean初始化完成前创建实例的ObjectFactory加工工厂
 			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
@@ -1501,9 +1501,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				//尝试获取mbd的PropertyValues
 				pvs = mbd.getPropertyValues();
 			}
-			//遍历工厂类的所有猴子处理器
+			//遍历工厂类的所有后置处理器
 			for (InstantiationAwareBeanPostProcessor bp : getBeanPostProcessorCache().instantiationAware) {
-				//这里既会走testA,又会走testB ????
+				//这里既会走testA,又会走testB
+				//在这里会调用AbstractBeanFactory.getBean来注入依赖的bean（testB）对象。
 				PropertyValues pvsToUse = bp.postProcessProperties(pvs, bw.getWrappedInstance(), beanName);
 				if (pvsToUse == null) {
 					return;

@@ -625,7 +625,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				// 自动注入，生成一级缓存，并调用PostProcessBeanFactory增强修改bean定义中的值
 				invokeBeanFactoryPostProcessors(beanFactory);
 				// Register bean processors that intercept bean creation.
-				//注册BeanPostProcessors
+				//首先根据order排序，然后注册factoryBean和普通bean的后置增强
 				registerBeanPostProcessors(beanFactory);
 				beanPostProcess.end();
 

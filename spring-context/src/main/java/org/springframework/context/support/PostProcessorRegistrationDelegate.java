@@ -85,8 +85,8 @@ final class PostProcessorRegistrationDelegate {
 		Set<String> processedBeans = new HashSet<>();
 
 		if (beanFactory instanceof BeanDefinitionRegistry registry) {
-			List<BeanFactoryPostProcessor> regularPostProcessors = new ArrayList<>();
-			List<BeanDefinitionRegistryPostProcessor> registryProcessors = new ArrayList<>();
+			List<BeanFactoryPostProcessor> regularPostProcessors = new ArrayList<>();//该变量主要负责修改已经加载到beanFactory中的beanDefinition对象，发生时机比BeanDefinitionRegistryPostProcessor晚，是BeanDefinitionRegistryPostProcessor的父类
+			List<BeanDefinitionRegistryPostProcessor> registryProcessors = new ArrayList<>();//该变量主要负责修改加载到beanFactory之前的beanDefinition对象，比如bean的注册，甚至在任何Bean定义被读取前就动态地添加或删除Bean定义
 
 			for (BeanFactoryPostProcessor postProcessor : beanFactoryPostProcessors) {
 				if (postProcessor instanceof BeanDefinitionRegistryPostProcessor registryProcessor) {
@@ -117,7 +117,7 @@ final class PostProcessorRegistrationDelegate {
 			}
 			sortPostProcessors(currentRegistryProcessors, beanFactory);
 			registryProcessors.addAll(currentRegistryProcessors);
-			//spring自动注入
+			//spring自动注入，放入到一级缓存中
 			invokeBeanDefinitionRegistryPostProcessors(currentRegistryProcessors, registry, beanFactory.getApplicationStartup());
 			currentRegistryProcessors.clear();
 
@@ -270,7 +270,7 @@ final class PostProcessorRegistrationDelegate {
 		// First, register the BeanPostProcessors that implement PriorityOrdered.
 		//首先，注册实现 PriorityOrdered 的 BeanPostProcessors。
 		sortPostProcessors(priorityOrderedPostProcessors, beanFactory);//根据order排序
-		registerBeanPostProcessors(beanFactory, priorityOrderedPostProcessors);//开始注册BeanPostProcessors
+		registerBeanPostProcessors(beanFactory, priorityOrderedPostProcessors);//开始注册BeanPostProcessors，普通bean和factoryBean的后置增强
 
 		// Next, register the BeanPostProcessors that implement Ordered.
 		List<BeanPostProcessor> orderedPostProcessors = new ArrayList<>(orderedPostProcessorNames.size());
